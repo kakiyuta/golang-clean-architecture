@@ -23,8 +23,16 @@ import (
 
 // Product defines model for Product.
 type Product struct {
-	Id   *int64  `json:"id,omitempty"`
-	Name *string `json:"name,omitempty"`
+	Id          *int64        `json:"id,omitempty"`
+	Name        *string       `json:"name,omitempty"`
+	Validations *[]Validation `json:"validations,omitempty"`
+}
+
+// Validation defines model for Validation.
+type Validation struct {
+	Id    *int64  `json:"id,omitempty"`
+	Name  *string `json:"name,omitempty"`
+	Price *int    `json:"price,omitempty"`
 }
 
 // GetV1ProductsParams defines parameters for GetV1Products.
@@ -240,7 +248,10 @@ type ClientWithResponsesInterface interface {
 type GetV1ProductsResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
-	JSON200      *[]Product
+	JSON200      *struct {
+		Products *[]Product `json:"products,omitempty"`
+		Total    *int64     `json:"total,omitempty"`
+	}
 }
 
 // Status returns HTTPResponse.Status
@@ -283,7 +294,10 @@ func ParseGetV1ProductsResponse(rsp *http.Response) (*GetV1ProductsResponse, err
 
 	switch {
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
-		var dest []Product
+		var dest struct {
+			Products *[]Product `json:"products,omitempty"`
+			Total    *int64     `json:"total,omitempty"`
+		}
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
@@ -366,14 +380,14 @@ func RegisterHandlersWithBaseURL(router EchoRouter, si ServerInterface, baseURL 
 // Base64 encoded, gzipped, json marshaled Swagger object
 var swaggerSpec = []string{
 
-	"H4sIAAAAAAAC/4RSTYsTQRD9K8vT47AzUfHQNxGRxYMBwYt4aCc1SS/pD7sriyHMIQmK4EFQovgPxIN4",
-	"F/wzzfg7pHsmZiUue5npqq5579Wbt0JttbOGDAeIFUI9Iy3zceztZFFzOjpvHXlWlC/UJD0b67VkCCjD",
-	"d++gAC8d9SVNyaMtYKSmNDrcBPbKTNG2f2fti3OqGW1qKdPYNDyhUHvlWFkDgQf3T57MrDu5Nz5LFIrn",
-	"dOiiwAX50E+OTqvTKrFaR0Y6BYHbuVXASZ5l5eXFqHT9WrmeEh9Tdq+/drs33cd13Hzo3n/qfn1GBvUy",
-	"DZxNIPCQ+OlovAdKBF5qYvIB4tkRXsaI6y9x864H/r37gbQwBF4uyC+xtwpzpRWjGH5Dr62RizlDjKoC",
-	"Wr5SeqFTkSplhurY/La4XkZcf4+bb3G7i5ufcbuN27dXqLJNE+gKWZd1VP/R8byAp+CsCX14blVVetXW",
-	"MJnsvnRurupsbnkektbVJSLFpPOHNz01ELhRHgJbDmkt91E9JEt6L5d9sP614fGj1G3b9k8AAAD//yz5",
-	"z236AgAA",
+	"H4sIAAAAAAAC/7RTTYsTMRj+K8urx7AzVfEwNxGRxYMFYS/iIc6802aZfJi8LZZlDm1RBA+CUsV/IB7E",
+	"u+CfCePvkCTTbZfpYi9eZvJ+5HmfPHlyCaWWRitU5KC4BFdOUfK4HFtdzUoKS2O1QUsCY0FU4VtrKzlB",
+	"AULR/XvAgBYGU4gTtNAyUFxiaO0rjqxQk1CY80ZUnIRWCZBQxsVtizUUcCvbkcp6Rtn51Z6A0ENya/kC",
+	"2l1Cv7zAkkLHXv9/OIGxotyvXO0ZUgkpoWoduit0pRUmsYJHD0+eTbU5eTA+C9MFNbjLAoM5Wpc6R6f5",
+	"aR7maoOKGwEF3I0pBobTNB4qm48yk+4sxhOk4cjuzbdu87b7tPSrj92Hz93vLxBBbVTqrIICHiOdj8Zb",
+	"oDDAcomE1kHxfIAXMfzyq1+9T8B/Nj8hHBgKeDVDu4CtitAIKQhY77HEreazhqAY5Qwkfy3kTIYgREL1",
+	"ETug8b9p+OUPv/ru1xu/+uXXa79+dwMrXdcOb6C1zyM/wOMFA4vOaOWSr+7kefiVWhGqqD43phFlFDe7",
+	"cMmLu0HXXbl/eUc9ie0LHbwHBqSJN0eZ/LBhr8v79EnItm37NwAA//+ahdTyLwQAAA==",
 }
 
 // GetSwagger returns the content of the embedded swagger specification file
