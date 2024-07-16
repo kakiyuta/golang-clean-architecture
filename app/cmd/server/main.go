@@ -4,6 +4,7 @@ import (
 	"github.com/kakiyuta/golang-clean-architecture/app/controller"
 	api "github.com/kakiyuta/golang-clean-architecture/app/gen"
 	"github.com/labstack/echo/v4"
+	middleware "github.com/labstack/echo/v4/middleware"
 	smiddleware "github.com/oapi-codegen/echo-middleware"
 )
 
@@ -17,6 +18,9 @@ func main() {
 	}
 	swagger.Servers = nil
 	e.Use(smiddleware.OapiRequestValidator(swagger))
+
+	// Logger
+	e.Use(middleware.Logger())
 
 	controller := controller.Controller{}
 	api.RegisterHandlers(e, &controller)
