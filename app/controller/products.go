@@ -10,6 +10,11 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
+type ProductList struct {
+	Products []*api.Product `json:"products"`
+	Total    int            `json:"total"`
+}
+
 func (c *Controller) GetV1Products(ctx echo.Context, params api.GetV1ProductsParams) error {
 
 	input := input.NewGetProducts(params.Limit, params.Offset)
@@ -20,7 +25,12 @@ func (c *Controller) GetV1Products(ctx echo.Context, params api.GetV1ProductsPar
 
 	products := convertProducts(output)
 
-	return ctx.JSON(http.StatusOK, products)
+	result := ProductList{
+		Products: products,
+		Total:    output.Total,
+	}
+
+	return ctx.JSON(http.StatusOK, result)
 }
 
 // convertProducts converts output.ProductsGetProducts to []*api.Product
