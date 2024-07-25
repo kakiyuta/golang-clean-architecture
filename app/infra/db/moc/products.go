@@ -4,7 +4,7 @@ import "github.com/kakiyuta/golang-clean-architecture/app/domain/model"
 
 type Product struct{}
 
-func (p Product) GetProducts(limit int, offset int) ([]model.Product, error) {
+func (p *Product) GetProducts(limit int, offset int) ([]model.Product, error) {
 	return []model.Product{
 		{
 			ID:   1,
@@ -17,12 +17,12 @@ func (p Product) GetProducts(limit int, offset int) ([]model.Product, error) {
 	}, nil
 }
 
-func (p Product) GetProductsWithVariation(limit int, offset int) ([]model.Product, error) {
+func (p *Product) GetProductsWithVariation(limit int, offset int) ([]model.Product, error) {
 	return []model.Product{
 		{
 			ID:   1,
 			Name: "product1",
-			Validations: []model.Validation{
+			Validations: []model.Variant{
 				{
 					ID:    1,
 					Name:  "validation1",
@@ -38,7 +38,7 @@ func (p Product) GetProductsWithVariation(limit int, offset int) ([]model.Produc
 		{
 			ID:   2,
 			Name: "product2",
-			Validations: []model.Validation{
+			Validations: []model.Variant{
 				{
 					ID:    3,
 					Name:  "validation3",
@@ -49,7 +49,7 @@ func (p Product) GetProductsWithVariation(limit int, offset int) ([]model.Produc
 	}, nil
 }
 
-func (p Product) GetProductByID(id int) (model.Product, error) {
+func (p *Product) GetProductByID(id int) (model.Product, error) {
 	return model.Product{
 		ID:   1,
 		Name: "product1",

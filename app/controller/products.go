@@ -37,6 +37,7 @@ func (c *Controller) GetV1Products(ctx echo.Context, params api.GetV1ProductsPar
 func (c *Controller) newProductsUseCase() usecase.ProductsUsecase {
 	return usecase.NewProductsUsecase(
 		c.repo.NewProducts(),
+		c.repo.NewVariants(),
 	)
 }
 

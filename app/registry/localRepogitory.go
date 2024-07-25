@@ -14,3 +14,7 @@ func NewLocalRepository() RepositoryInterface {
 func (r *localRepositoryImp) NewProducts() repository.Products {
 	return &moc.Product{}
 }
+
+func (r *localRepositoryImp) NewVariants() repository.Variants {
+	return &moc.Variants{}
+}

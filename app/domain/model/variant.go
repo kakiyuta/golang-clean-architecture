@@ -2,7 +2,7 @@ package model
 
 import "time"
 
-type Validation struct {
+type Variant struct {
 	ID        int
 	ProductID int
 	Name      string

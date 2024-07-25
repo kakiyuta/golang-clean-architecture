@@ -8,11 +8,13 @@ import (
 
 type ProductsUsecase struct {
 	ProductRepository repository.Products
+	VariantRepository repository.Variants
 }
 
-func NewProductsUsecase(p repository.Products) ProductsUsecase {
+func NewProductsUsecase(p repository.Products, v repository.Variants) ProductsUsecase {
 	return ProductsUsecase{
 		ProductRepository: p,
+		VariantRepository: v,
 	}
 }
 
