@@ -1,9 +1,6 @@
 run:
 	go run cmd/server/main.go
 
-run-digtest:
-	go run cmd/digtest/main.go
-
 gen-oapi:
 	oapi-codegen -package api -o gen/api.gen.go docs/swagger/swagger.yaml
 
