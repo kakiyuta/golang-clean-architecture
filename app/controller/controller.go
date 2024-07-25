@@ -1,15 +1,16 @@
 package controller
 
 import (
-	registry "github.com/kakiyuta/golang-clean-architecture/app/registory"
+	api "github.com/kakiyuta/golang-clean-architecture/app/gen"
+	"github.com/kakiyuta/golang-clean-architecture/app/registry"
 )
 
 type Controller struct {
 	repo registry.RepositoryInterface
 }
 
-func NewController(repo registry.RepositoryInterface) Controller {
-	return Controller{
+func NewController(repo registry.RepositoryInterface) api.ServerInterface {
+	return &Controller{
 		repo: repo,
 	}
 }
