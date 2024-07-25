@@ -1,49 +1,29 @@
 package usecase
 
 import (
-	"github.com/kakiyuta/golang-clean-architecture/app/domain/model"
+	"github.com/kakiyuta/golang-clean-architecture/app/domain/repository"
 	"github.com/kakiyuta/golang-clean-architecture/app/usecase/input"
 	"github.com/kakiyuta/golang-clean-architecture/app/usecase/output"
 )
 
-type Products struct{}
-
-func NewProducts() *Products {
-	return &Products{}
+type ProductsUsecase struct {
+	ProductRepository repository.Products
 }
 
-func (p *Products) GetProducts(input input.ProductsGetProducts) (*output.ProductsGetProducts, error) {
+func NewProductsUsecase(p repository.Products) ProductsUsecase {
+	return ProductsUsecase{
+		ProductRepository: p,
+	}
+}
+
+func (p *ProductsUsecase) GetProducts(input input.ProductsGetProducts) (*output.ProductsGetProducts, error) {
+	productsVariants, err := p.ProductRepository.GetProductsWithVariation(input.Limit, input.Offset)
+	if err != nil {
+		return nil, err
+	}
 	output := &output.ProductsGetProducts{
-		Total: 0,
-		Products: []model.Product{
-			{
-				ID:   1,
-				Name: "product1",
-				Validations: []model.Validation{
-					{
-						ID:    1,
-						Name:  "validation1",
-						Price: 100,
-					},
-					{
-						ID:    2,
-						Name:  "validation2",
-						Price: 100,
-					},
-				},
-			},
-			{
-				ID:   2,
-				Name: "product2",
-				Validations: []model.Validation{
-					{
-						ID:    3,
-						Name:  "validation3",
-						Price: 100,
-					},
-				},
-			},
-		},
+		Total:    0,
+		Products: productsVariants,
 	}
 	return output, nil
 }

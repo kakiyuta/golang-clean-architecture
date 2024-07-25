@@ -16,9 +16,9 @@ type ProductList struct {
 }
 
 func (c *Controller) GetV1Products(ctx echo.Context, params api.GetV1ProductsParams) error {
-
 	input := input.NewGetProducts(params.Limit, params.Offset)
-	output, err := usecase.NewProducts().GetProducts(*input)
+	usecase := c.newProductsUseCase()
+	output, err := usecase.GetProducts(*input)
 	if err != nil {
 		return ctx.JSON(http.StatusInternalServerError, err)
 	}
@@ -31,6 +31,13 @@ func (c *Controller) GetV1Products(ctx echo.Context, params api.GetV1ProductsPar
 	}
 
 	return ctx.JSON(http.StatusOK, result)
+}
+
+// newProductsUseCase Productsユースケースを作成
+func (c *Controller) newProductsUseCase() usecase.ProductsUsecase {
+	return usecase.NewProductsUsecase(
+		c.repo.NewProducts(),
+	)
 }
 
 // convertProducts converts output.ProductsGetProducts to []*api.Product

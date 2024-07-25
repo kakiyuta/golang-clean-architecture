@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/kakiyuta/golang-clean-architecture/app/controller"
 	api "github.com/kakiyuta/golang-clean-architecture/app/gen"
+	registry "github.com/kakiyuta/golang-clean-architecture/app/registory"
 	"github.com/labstack/echo/v4"
 	middleware "github.com/labstack/echo/v4/middleware"
 	smiddleware "github.com/oapi-codegen/echo-middleware"
@@ -22,7 +23,9 @@ func main() {
 	// Logger
 	e.Use(middleware.Logger())
 
-	controller := controller.Controller{}
+	// ローカルテスト用のレポジトリを作成
+	repo := registry.NewLocalRepository()
+	controller := controller.NewController(repo)
 	api.RegisterHandlers(e, &controller)
 
 	e.Logger.Fatal(e.Start(":1323"))
