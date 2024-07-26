@@ -3,7 +3,7 @@ package controller
 import (
 	"net/http"
 
-	api "github.com/kakiyuta/golang-clean-architecture/app/gen"
+	"github.com/kakiyuta/golang-clean-architecture/app/gen/api"
 	"github.com/kakiyuta/golang-clean-architecture/app/usecase"
 	"github.com/kakiyuta/golang-clean-architecture/app/usecase/input"
 	"github.com/kakiyuta/golang-clean-architecture/app/usecase/output"

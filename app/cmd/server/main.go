@@ -2,7 +2,7 @@ package main
 
 import (
 	"github.com/kakiyuta/golang-clean-architecture/app/controller"
-	api "github.com/kakiyuta/golang-clean-architecture/app/gen"
+	"github.com/kakiyuta/golang-clean-architecture/app/gen/api"
 	"github.com/kakiyuta/golang-clean-architecture/app/registry"
 	"github.com/labstack/echo/v4"
 	middleware "github.com/labstack/echo/v4/middleware"

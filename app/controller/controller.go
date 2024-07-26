@@ -1,7 +1,7 @@
 package controller
 
 import (
-	api "github.com/kakiyuta/golang-clean-architecture/app/gen"
+	"github.com/kakiyuta/golang-clean-architecture/app/gen/api"
 	"github.com/kakiyuta/golang-clean-architecture/app/registry"
 )
 
