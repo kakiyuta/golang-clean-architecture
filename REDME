@@ -1,0 +1,7 @@
+# Golang Clean Architecture Sample Project
+
+## 残件
+
+- mysqlのトランザクション処理を何処におくか
+- envファイルの読み込み
+- 単体テストの実装
