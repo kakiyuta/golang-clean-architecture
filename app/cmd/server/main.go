@@ -10,6 +10,12 @@ import (
 )
 
 func main() {
+	// // 環境変数の読み込み
+	// err := godotenv.Load(".env")
+	// if err != nil {
+	// 	log.Fatal("Error loading .env file")
+	// }
+
 	e := echo.New()
 
 	// APIリクエストのバリデーション
@@ -24,7 +30,8 @@ func main() {
 	e.Use(middleware.Logger())
 
 	// ローカルテスト用のレポジトリを作成
-	repo := registry.NewLocalRepository()
+	// repo := registry.NewLocalRepository()
+	repo := registry.NewDevRepository()
 	con := controller.NewController(repo)
 	api.RegisterHandlers(e, con)
 	e.Logger.Fatal(e.Start(":1323"))

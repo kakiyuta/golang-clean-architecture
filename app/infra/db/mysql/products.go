@@ -1,8 +1,13 @@
 package mysql
 
-import "github.com/kakiyuta/golang-clean-architecture/app/domain/model"
+import (
+	"github.com/kakiyuta/golang-clean-architecture/app/domain/model"
+	"gorm.io/gorm"
+)
 
-type Product struct{}
+type Product struct {
+	conn *gorm.DB
+}
 
 func (p *Product) GetProducts(limit int, offset int) ([]model.Product, error) {
 	return []model.Product{
