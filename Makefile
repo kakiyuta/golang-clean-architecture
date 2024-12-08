@@ -2,7 +2,7 @@ up:
 	docker-compose up -d
 down:
 	docker-compose down
-bash:
+sh:
 	docker-compose exec ec-server bash
 rm-img:
 	docker-compose down --rmi all
