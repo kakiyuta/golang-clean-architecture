@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/kakiyuta/golang-clean-architecture/app/gen/api"
+	"github.com/kakiyuta/golang-clean-architecture/app/infra/db"
 	"github.com/kakiyuta/golang-clean-architecture/app/usecase"
 	"github.com/kakiyuta/golang-clean-architecture/app/usecase/input"
 	"github.com/kakiyuta/golang-clean-architecture/app/usecase/output"
@@ -35,9 +36,15 @@ func (c *Controller) GetV1Products(ctx echo.Context, params api.GetV1ProductsPar
 
 // newProductsUseCase Productsユースケースを作成
 func (c *Controller) newProductsUseCase() usecase.ProductsUsecase {
+	conn, err := db.NewMySQLConnector()
+	if err != nil {
+		panic(err)
+	}
+
 	return usecase.NewProductsUsecase(
 		c.repo.NewProducts(),
 		c.repo.NewVariants(),
+		conn,
 	)
 }
 
@@ -46,9 +53,9 @@ func convertProducts(output *output.ProductsGetProducts) []*api.Product {
 	products := make([]*api.Product, len(output.Products))
 
 	for i, product := range output.Products {
-		validations := make([]api.Validation, len(product.Validations))
+		validations := make([]api.Validation, len(product.Variants))
 
-		for j, validation := range product.Validations {
+		for j, validation := range product.Variants {
 			validations[j] = api.Validation{
 				Id:    Int64Ptr(int64(validation.ID)),
 				Name:  StringPtr(validation.Name),

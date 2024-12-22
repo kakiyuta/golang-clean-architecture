@@ -22,7 +22,7 @@ func (p *Product) GetProductsWithVariation(limit int, offset int) ([]model.Produ
 		{
 			ID:   1,
 			Name: "product1",
-			Validations: []model.Variant{
+			Variants: []model.Variant{
 				{
 					ID:    1,
 					Name:  "validation1",
@@ -38,7 +38,7 @@ func (p *Product) GetProductsWithVariation(limit int, offset int) ([]model.Produ
 		{
 			ID:   2,
 			Name: "product2",
-			Validations: []model.Variant{
+			Variants: []model.Variant{
 				{
 					ID:    3,
 					Name:  "validation3",

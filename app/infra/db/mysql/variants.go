@@ -1,13 +1,12 @@
 package mysql
 
 import (
-	"database/sql"
-
 	"github.com/kakiyuta/golang-clean-architecture/app/domain/model"
+	"gorm.io/gorm"
 )
 
 type Variants struct {
-	Con *sql.DB
+	Con *gorm.DB
 }
 
 func (v *Variants) GetVariants(productID int) ([]model.Variant, error) {

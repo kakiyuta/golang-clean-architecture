@@ -7,11 +7,11 @@ import (
 )
 
 type devRepositoryImp struct {
-	db *db.SqlHandler
+	db *db.MySQLConnector
 }
 
 func NewDevRepository() RepositoryInterface {
-	db, err := db.NewSqlHandler()
+	db, err := db.NewMySQLConnector()
 	if err != nil {
 		panic(err)
 	}
@@ -19,11 +19,13 @@ func NewDevRepository() RepositoryInterface {
 }
 
 func (r *devRepositoryImp) NewProducts() repository.Products {
-	return &mysql.Product{}
+	return &mysql.Product{
+		Con: r.db.Connection,
+	}
 }
 
 func (r *devRepositoryImp) NewVariants() repository.Variants {
 	return &mysql.Variants{
-		Con: nil,
+		Con: r.db.Connection,
 	}
 }

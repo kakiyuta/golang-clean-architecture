@@ -2,19 +2,22 @@ package usecase
 
 import (
 	"github.com/kakiyuta/golang-clean-architecture/app/domain/repository"
+	"github.com/kakiyuta/golang-clean-architecture/app/infra/db"
 	"github.com/kakiyuta/golang-clean-architecture/app/usecase/input"
 	"github.com/kakiyuta/golang-clean-architecture/app/usecase/output"
 )
 
 type ProductsUsecase struct {
-	ProductRepository repository.Products
-	VariantRepository repository.Variants
+	ConnectionController db.ConnectionController
+	ProductRepository    repository.Products
+	VariantRepository    repository.Variants
 }
 
-func NewProductsUsecase(p repository.Products, v repository.Variants) ProductsUsecase {
+func NewProductsUsecase(p repository.Products, v repository.Variants, cc db.ConnectionController) ProductsUsecase {
 	return ProductsUsecase{
-		ProductRepository: p,
-		VariantRepository: v,
+		ConnectionController: cc,
+		ProductRepository:    p,
+		VariantRepository:    v,
 	}
 }
 
@@ -23,9 +26,17 @@ func (p *ProductsUsecase) GetProducts(input input.ProductsGetProducts) (*output.
 	if err != nil {
 		return nil, err
 	}
+
+	// トランザクションの動作確認
+	p.ConnectionController.Begin()
+	defer p.ConnectionController.Rollback()
+
 	output := &output.ProductsGetProducts{
 		Total:    0,
 		Products: productsVariants,
 	}
+
+	p.ConnectionController.Commit()
+
 	return output, nil
 }

@@ -9,13 +9,13 @@ import (
 
 func main() {
 	// DB接続
-	db, err := db.NewSqlHandler()
+	db, err := db.NewMySQLConnector()
 	if err != nil {
 		panic(err)
 	}
 
 	product := model.Product{}
-	err = db.Conn.First(&product, 1).Error
+	err = db.GetSlave().First(&product, 1).Error
 	if err != nil {
 		panic(err)
 	}
