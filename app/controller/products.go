@@ -35,12 +35,25 @@ func (c *Controller) GetV1Products(ctx echo.Context, params api.GetV1ProductsPar
 }
 
 func (c *Controller) PostV1Products(ctx echo.Context) error {
-	puroduc := &api.Prouct{
-		Id:   Int64Ptr(1),
-		Name: StringPtr("test"),
+
+	var product api.PostV1ProductsJSONRequestBody
+	if err := ctx.Bind(&product); err != nil {
+		return ctx.JSON(http.StatusBadRequest, err)
 	}
 
-	return ctx.JSON(http.StatusOK, puroduc)
+	input := input.NewCreateProduct(product.Name)
+	usecase := c.newProductsUseCase()
+	output, err := usecase.CreateProduct(*input)
+	if err != nil {
+		return ctx.JSON(http.StatusInternalServerError, err)
+	}
+
+	result := api.Prouct{
+		Id:   Int64Ptr(int64(output.Product.ID)),
+		Name: StringPtr(output.Product.Name),
+	}
+
+	return ctx.JSON(http.StatusOK, result)
 }
 
 // newProductsUseCase Productsユースケースを作成

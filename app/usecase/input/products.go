@@ -24,3 +24,15 @@ func NewGetProducts(limit *int, offset *int) *ProductsGetProducts {
 	}
 	return gp
 }
+
+// ProductsCreateProduct is the input struct for CreateProduct
+type ProductsCreateProduct struct {
+	Name string
+}
+
+// Constructor for CreateProduct
+func NewCreateProduct(name string) *ProductsCreateProduct {
+	return &ProductsCreateProduct{
+		Name: name,
+	}
+}

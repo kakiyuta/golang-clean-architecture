@@ -6,3 +6,7 @@ type ProductsGetProducts struct {
 	Total    int
 	Products []model.Product
 }
+
+type ProdunctsGreateProdunct struct {
+	Product model.Product
+}

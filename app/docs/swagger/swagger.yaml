@@ -52,6 +52,9 @@ paths:
                 name:
                   type: string
                   example: "Sample Product"
+                  maxLength: 255
+              required:
+                - name
       responses:
         "201":
           description: Created
