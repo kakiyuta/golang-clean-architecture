@@ -2,7 +2,7 @@ run:
 	go run cmd/server/main.go
 
 gen-oapi:
-	oapi-codegen -package api -o gen/api.gen.go docs/swagger/swagger.yaml
+	oapi-codegen -package api -o gen/api/api.gen.go docs/swagger/swagger.yaml
 
 swagger-up:
 	docker-compose -f docs/swagger/docker-compose.yml up -d

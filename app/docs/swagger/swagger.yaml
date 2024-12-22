@@ -36,13 +36,40 @@ paths:
                   products:
                     type: array
                     items:
-                      $ref: '#/components/schemas/Product'
+                      $ref: '#/components/schemas/ProductVariants'
                   total:
                     type: integer
                     format: int64
+    post:
+      description: 商品を登録
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: "Sample Product"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Prouct'
 components:
   schemas:
-    Product:
+    Prouct:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+    ProductVariants:
       type: object
       properties:
         id:
@@ -53,8 +80,8 @@ components:
         validations:
           type: array
           items:
-            $ref: '#/components/schemas/Validation'
-    Validation:
+            $ref: '#/components/schemas/Variant'
+    Variant:
       type: object
       properties:
         id:

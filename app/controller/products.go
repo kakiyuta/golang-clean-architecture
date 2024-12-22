@@ -12,8 +12,8 @@ import (
 )
 
 type ProductList struct {
-	Products []*api.Product `json:"products"`
-	Total    int            `json:"total"`
+	Products []*api.ProductVariants `json:"products"`
+	Total    int                    `json:"total"`
 }
 
 func (c *Controller) GetV1Products(ctx echo.Context, params api.GetV1ProductsParams) error {
@@ -34,6 +34,15 @@ func (c *Controller) GetV1Products(ctx echo.Context, params api.GetV1ProductsPar
 	return ctx.JSON(http.StatusOK, result)
 }
 
+func (c *Controller) PostV1Products(ctx echo.Context) error {
+	puroduc := &api.Prouct{
+		Id:   Int64Ptr(1),
+		Name: StringPtr("test"),
+	}
+
+	return ctx.JSON(http.StatusOK, puroduc)
+}
+
 // newProductsUseCase Productsユースケースを作成
 func (c *Controller) newProductsUseCase() usecase.ProductsUsecase {
 	conn, err := db.NewMySQLConnector()
@@ -49,21 +58,21 @@ func (c *Controller) newProductsUseCase() usecase.ProductsUsecase {
 }
 
 // convertProducts converts output.ProductsGetProducts to []*api.Product
-func convertProducts(output *output.ProductsGetProducts) []*api.Product {
-	products := make([]*api.Product, len(output.Products))
+func convertProducts(output *output.ProductsGetProducts) []*api.ProductVariants {
+	products := make([]*api.ProductVariants, len(output.Products))
 
 	for i, product := range output.Products {
-		validations := make([]api.Validation, len(product.Variants))
+		validations := make([]api.Variant, len(product.Variants))
 
 		for j, validation := range product.Variants {
-			validations[j] = api.Validation{
+			validations[j] = api.Variant{
 				Id:    Int64Ptr(int64(validation.ID)),
 				Name:  StringPtr(validation.Name),
 				Price: IntPtr(validation.Price),
 			}
 		}
 
-		products[i] = &api.Product{
+		products[i] = &api.ProductVariants{
 			Id:          Int64Ptr(int64(product.ID)),
 			Name:        StringPtr(product.Name),
 			Validations: &validations,
