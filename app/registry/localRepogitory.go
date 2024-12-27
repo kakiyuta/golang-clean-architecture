@@ -15,7 +15,7 @@ func NewLocalRepository() RepositoryInterface {
 	return &localRepositoryImp{db}
 }
 
-func (r *localRepositoryImp) GetDB() db.ConnectionController {
+func (r *localRepositoryImp) GetDB() db.Connector {
 	return r.db
 }
 

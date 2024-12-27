@@ -18,7 +18,7 @@ func NewDevRepository() RepositoryInterface {
 	return &devRepositoryImp{db: db}
 }
 
-func (r *devRepositoryImp) GetDB() db.ConnectionController {
+func (r *devRepositoryImp) GetDB() db.Connector {
 	return r.db
 }
 

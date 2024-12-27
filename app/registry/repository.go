@@ -6,7 +6,7 @@ import (
 )
 
 type RepositoryInterface interface {
-	GetDB() db.ConnectionController
+	GetDB() db.Connector
 	NewProducts() repository.Products
 	NewVariants() repository.Variants
 }

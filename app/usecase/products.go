@@ -9,12 +9,12 @@ import (
 )
 
 type ProductsUsecase struct {
-	ConnectionController db.ConnectionController
+	ConnectionController db.Connector
 	ProductRepository    repository.Products
 	VariantRepository    repository.Variants
 }
 
-func NewProductsUsecase(cc db.ConnectionController, p repository.Products, v repository.Variants) ProductsUsecase {
+func NewProductsUsecase(cc db.Connector, p repository.Products, v repository.Variants) ProductsUsecase {
 	return ProductsUsecase{
 		ConnectionController: cc,
 		ProductRepository:    p,

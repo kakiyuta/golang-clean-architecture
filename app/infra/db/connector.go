@@ -1,7 +1,7 @@
 package db
 
-// ConnectionController コネクションコントローラ
-type ConnectionController interface {
+// Connector コネクションコントローラ
+type Connector interface {
 	// Begin トランザクションを開始する
 	Begin() error
 
