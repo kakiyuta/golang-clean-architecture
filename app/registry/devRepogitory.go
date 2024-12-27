@@ -18,6 +18,10 @@ func NewDevRepository() RepositoryInterface {
 	return &devRepositoryImp{db: db}
 }
 
+func (r *devRepositoryImp) GetDB() db.ConnectionController {
+	return r.db
+}
+
 func (r *devRepositoryImp) NewProducts() repository.Products {
 	return &mysql.Product{
 		Con: r.db,

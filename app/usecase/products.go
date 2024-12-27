@@ -14,7 +14,7 @@ type ProductsUsecase struct {
 	VariantRepository    repository.Variants
 }
 
-func NewProductsUsecase(p repository.Products, v repository.Variants, cc db.ConnectionController) ProductsUsecase {
+func NewProductsUsecase(cc db.ConnectionController, p repository.Products, v repository.Variants) ProductsUsecase {
 	return ProductsUsecase{
 		ConnectionController: cc,
 		ProductRepository:    p,

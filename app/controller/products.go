@@ -4,7 +4,6 @@ import (
 	"net/http"
 
 	"github.com/kakiyuta/golang-clean-architecture/app/gen/api"
-	"github.com/kakiyuta/golang-clean-architecture/app/infra/db"
 	"github.com/kakiyuta/golang-clean-architecture/app/usecase"
 	"github.com/kakiyuta/golang-clean-architecture/app/usecase/input"
 	"github.com/kakiyuta/golang-clean-architecture/app/usecase/output"
@@ -58,15 +57,10 @@ func (c *Controller) PostV1Products(ctx echo.Context) error {
 
 // newProductsUseCase Productsユースケースを作成
 func (c *Controller) newProductsUseCase() usecase.ProductsUsecase {
-	conn, err := db.NewMySQLConnector()
-	if err != nil {
-		panic(err)
-	}
-
 	return usecase.NewProductsUsecase(
+		c.repo.GetDB(),
 		c.repo.NewProducts(),
 		c.repo.NewVariants(),
-		conn,
 	)
 }
 
