@@ -2,27 +2,39 @@ package mysql
 
 import (
 	"github.com/kakiyuta/golang-clean-architecture/app/domain/model"
-	"gorm.io/gorm"
+	"github.com/kakiyuta/golang-clean-architecture/app/infra/db"
 )
 
 type Product struct {
-	Con *gorm.DB
+	// Con *gorm.DB
+	Con *db.MySQLConnector
 }
 
 func (p *Product) GetProducts(limit int, offset int) ([]model.Product, error) {
+	db := p.Con.GetSlave()
+
 	var products []model.Product
-	p.Con.Limit(limit).Offset(offset).Find(&products).Where("deleted_at IS NULL")
+	db.Limit(limit).Offset(offset).Find(&products).Where("deleted_at IS NULL")
 	return products, nil
 }
 
 func (p *Product) GetProductsWithVariation(limit int, offset int) ([]model.Product, error) {
+	db := p.Con.GetSlave()
+
 	var products []model.Product
-	p.Con.Limit(limit).Offset(offset).Preload("Variants").Find(&products).Where("deleted_at IS NULL")
+	db.Limit(limit).Offset(offset).Preload("Variants").Find(&products).Where("deleted_at IS NULL")
 	return products, nil
 }
 
 func (p *Product) GetProductByID(id int) (model.Product, error) {
+	db := p.Con.GetSlave()
 	var product model.Product
-	p.Con.First(&product, id)
+	db.First(&product, id)
 	return product, nil
+}
+
+func (p *Product) CreateProduct(produnct model.Product) (model.Product, error) {
+	db := p.Con.GetMaster()
+	db.Create(&produnct)
+	return produnct, nil
 }

@@ -55,3 +55,10 @@ func (p *Product) GetProductByID(id int) (model.Product, error) {
 		Name: "product1",
 	}, nil
 }
+
+func (p *Product) CreateProduct(produnct model.Product) (model.Product, error) {
+	return model.Product{
+		ID:   1,
+		Name: produnct.Name,
+	}, nil
+}

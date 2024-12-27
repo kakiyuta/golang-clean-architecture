@@ -20,12 +20,12 @@ func NewDevRepository() RepositoryInterface {
 
 func (r *devRepositoryImp) NewProducts() repository.Products {
 	return &mysql.Product{
-		Con: r.db.Connection,
+		Con: r.db,
 	}
 }
 
 func (r *devRepositoryImp) NewVariants() repository.Variants {
 	return &mysql.Variants{
-		Con: r.db.Connection,
+		Con: r.db,
 	}
 }

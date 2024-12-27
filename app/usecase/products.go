@@ -29,27 +29,33 @@ func (p *ProductsUsecase) GetProducts(input input.ProductsGetProducts) (*output.
 		return nil, err
 	}
 
-	// トランザクションの動作確認
-	p.ConnectionController.Begin()
-	defer p.ConnectionController.Rollback()
-
 	output := &output.ProductsGetProducts{
 		Total:    0,
 		Products: productsVariants,
 	}
-
-	p.ConnectionController.Commit()
 
 	return output, nil
 }
 
 func (p *ProductsUsecase) CreateProduct(input input.ProductsCreateProduct) (*output.ProdunctsGreateProdunct, error) {
 
+	// トランザクションの動作確認
+	p.ConnectionController.Begin()
+	defer p.ConnectionController.Rollback()
+
+	// 商品を登録
+	product := model.Product{
+		Name: input.Name,
+	}
+	newProduct, err := p.ProductRepository.CreateProduct(product)
+	if err != nil {
+		return nil, err
+	}
+
+	// p.ConnectionController.Commit()
+
 	output := &output.ProdunctsGreateProdunct{
-		Product: model.Product{
-			ID:   1,
-			Name: input.Name,
-		},
+		Product: newProduct,
 	}
 	return output, nil
 }
