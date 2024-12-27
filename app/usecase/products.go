@@ -52,7 +52,7 @@ func (p *ProductsUsecase) CreateProduct(input input.ProductsCreateProduct) (*out
 		return nil, err
 	}
 
-	// p.ConnectionController.Commit()
+	p.ConnectionController.Commit()
 
 	output := &output.ProdunctsGreateProdunct{
 		Product: newProduct,
