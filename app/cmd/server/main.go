@@ -36,17 +36,4 @@ func main() {
 	api.RegisterHandlers(e, con)
 	e.Logger.Fatal(e.Start(":1323"))
 
-	// c := dig.New()
-	// c.Provide(controller.NewController)
-	// c.Provide(registry.NewLocalRepository)
-	// c.Provide(registry.RepositoryInterface.NewProducts)
-	// err = c.Invoke(func(con api.ServerInterface) {
-	// 	fmt.Println("test")
-	// 	api.RegisterHandlers(e, con)
-	// 	e.Logger.Fatal(e.Start(":1323"))
-	// })
-
-	// if err != nil {
-	// 	e.Logger.Fatal(err)
-	// }
 }
