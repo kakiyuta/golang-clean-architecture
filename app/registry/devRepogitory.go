@@ -2,8 +2,8 @@ package registry
 
 import (
 	"github.com/kakiyuta/golang-clean-architecture/app/domain/repository"
+	"github.com/kakiyuta/golang-clean-architecture/app/infra/dao/mysql"
 	"github.com/kakiyuta/golang-clean-architecture/app/infra/db"
-	"github.com/kakiyuta/golang-clean-architecture/app/infra/db/mysql"
 )
 
 type devRepositoryImp struct {
