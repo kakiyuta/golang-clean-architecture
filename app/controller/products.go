@@ -20,7 +20,7 @@ func (c *Controller) GetV1Products(ctx echo.Context, params api.GetV1ProductsPar
 	usecase := c.newProductsUseCase()
 	output, err := usecase.GetProducts(*input)
 	if err != nil {
-		return ctx.JSON(http.StatusInternalServerError, err)
+		return errorResponse(ctx, err)
 	}
 
 	products := convertProducts(output)

@@ -1,8 +1,12 @@
 package controller
 
 import (
+	"net/http"
+
 	"github.com/kakiyuta/golang-clean-architecture/app/gen/api"
+	"github.com/kakiyuta/golang-clean-architecture/app/library/weberrors"
 	"github.com/kakiyuta/golang-clean-architecture/app/registry"
+	"github.com/labstack/echo/v4"
 )
 
 type Controller struct {
@@ -25,4 +29,17 @@ func StringPtr(s string) *string {
 
 func IntPtr(i int) *int {
 	return &i
+}
+
+// errorResponse エラーレスポンスを返す
+func errorResponse(ctx echo.Context, err error) error {
+	httpCode := http.StatusInternalServerError
+	if we, ok := err.(*weberrors.WebError); ok {
+		httpCode = we.Code
+	}
+
+	return ctx.JSON(httpCode, map[string]interface{}{
+		"code": httpCode,
+		"msg":  err.Error(),
+	})
 }
