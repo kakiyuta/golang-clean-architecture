@@ -29,6 +29,8 @@ func (p *ProductsUsecase) GetProducts(input input.ProductsGetProducts) (*output.
 		return nil, err
 	}
 
+	// return nil, weberrors.New(500, "Internal Server Error hoge hoge")
+
 	output := &output.ProductsGetProducts{
 		Total:    0,
 		Products: productsVariants,

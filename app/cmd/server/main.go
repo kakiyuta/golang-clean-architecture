@@ -7,14 +7,12 @@ import (
 	"github.com/labstack/echo/v4"
 	middleware "github.com/labstack/echo/v4/middleware"
 	smiddleware "github.com/oapi-codegen/echo-middleware"
+	"go.uber.org/zap"
+	"go.uber.org/zap/zapcore"
 )
 
 func main() {
-	// // 環境変数の読み込み
-	// err := godotenv.Load(".env")
-	// if err != nil {
-	// 	log.Fatal("Error loading .env file")
-	// }
+	Init()
 
 	e := echo.New()
 
@@ -35,5 +33,34 @@ func main() {
 	con := controller.NewController(repo)
 	api.RegisterHandlers(e, con)
 	e.Logger.Fatal(e.Start(":1323"))
+}
 
+func Init() {
+	// ロガーの初期化
+	level := zap.NewAtomicLevel()
+	level.SetLevel(zapcore.DebugLevel)
+	conf := zap.Config{
+		Level:    level,
+		Encoding: "console", // json or console
+		EncoderConfig: zapcore.EncoderConfig{
+			TimeKey:        "time",
+			LevelKey:       "level",
+			NameKey:        "name",
+			CallerKey:      "caller",
+			MessageKey:     "msg",
+			StacktraceKey:  "stacktrace",
+			EncodeLevel:    zapcore.CapitalLevelEncoder,
+			EncodeTime:     zapcore.ISO8601TimeEncoder,
+			EncodeDuration: zapcore.StringDurationEncoder,
+			EncodeCaller:   zapcore.ShortCallerEncoder,
+		},
+		OutputPaths:      []string{"stdout"},
+		ErrorOutputPaths: []string{"stderr"},
+	}
+	logger, err := conf.Build()
+	if err != nil {
+		panic(err)
+	}
+	defer logger.Sync()
+	zap.ReplaceGlobals(logger)
 }

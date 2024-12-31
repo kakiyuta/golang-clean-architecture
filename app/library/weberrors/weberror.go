@@ -6,7 +6,7 @@ import (
 
 /**
  * 参考記事
- * https://qiita.com/iwakiri0104/items/24d70205aaa2415f0491
+ * https://zenn.dev/yagi_eng/articles/go-error-handling
  * https://qiita.com/yagi_eng/items/2957ef04cebcdeaae1d6
  */
 
