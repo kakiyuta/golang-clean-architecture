@@ -12,8 +12,9 @@ jobs:
         uses: actions/setup-go@v5
         with:
           go-version: '1.22.2'
-          go-version-file: ./go.mod
-          cache: true
+          # 今の規模だとでキャッシュを設定しても効果が薄いため、コード量が増えたら有効にする
+          # go-version-file: ./go.mod
+          # cache: true
       - name: Install dependencies
         run: |
           go mod tidy
