@@ -28,7 +28,6 @@ func main() {
 	e.Use(middleware.Logger())
 
 	// ローカルテスト用のレポジトリを作成
-	// repo := registry.NewLocalRepository()
 	repo := registry.NewDevRepository()
 	con := controller.NewController(repo)
 	api.RegisterHandlers(e, con)
