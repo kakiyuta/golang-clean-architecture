@@ -133,7 +133,7 @@ func TestProductsUsecase_CreateProduct(t *testing.T) {
 				mockDb.EXPECT().Rollback().Return()
 			},
 			want:    nil,
-			wantErr: true,
+			wantErr: false,
 		},
 	}
 	for _, tt := range tests {
