@@ -1,6 +1,8 @@
 FROM golang:1.22.5-bullseye
 
-RUN mkdir /go/src/app
+RUN mkdir /go/src/golang-clean-architecture
+
+WORKDIR /go/src/golang-clean-architecture
 
 RUN apt-get update && apt-get install -y \
     ca-certificates \
