@@ -20,3 +20,9 @@ migrate -path /go/src/app/migrations/ -database "mysql://user:password@tcp(ec-db
 migrate -path /go/src/app/migrations/ -database "mysql://user:password@tcp(ec-db:3306)/ec" down 1
 
 ```
+
+## TODO
+
+- ~~github actions の設定~~
+- github actionsのworkflowにlintを追加
+- テストフレームワーク `Testify` の調査
