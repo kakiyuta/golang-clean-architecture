@@ -8,5 +8,3 @@ linters:
     - staticcheck
     - typecheck
     - unused
-
-
