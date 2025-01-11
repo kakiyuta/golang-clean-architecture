@@ -42,7 +42,10 @@ func (p *ProductsUsecase) GetProducts(input input.ProductsGetProducts) (*output.
 func (p *ProductsUsecase) CreateProduct(input input.ProductsCreateProduct) (*output.ProdunctsGreateProdunct, error) {
 
 	// トランザクションの動作確認
-	p.ConnectionController.Begin()
+	err := p.ConnectionController.Begin()
+	if err != nil {
+		return nil, err
+	}
 	defer p.ConnectionController.Rollback()
 
 	// 商品を登録
@@ -54,7 +57,10 @@ func (p *ProductsUsecase) CreateProduct(input input.ProductsCreateProduct) (*out
 		return nil, err
 	}
 
-	p.ConnectionController.Commit()
+	err = p.ConnectionController.Commit()
+	if err != nil {
+		return nil, err
+	}
 
 	output := &output.ProdunctsGreateProdunct{
 		Product: newProduct,

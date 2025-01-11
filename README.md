@@ -3,6 +3,7 @@
 ## Tools
 
 - [golang-migrate](https://github.com/golang-migrate/migrate) : DBマイグレーション
+- [golangci-lint](https://golangci-lint.run/) : linter
 
 ## マイグレーション
 
@@ -20,6 +21,11 @@ migrate -path /go/src/app/migrations/ -database "mysql://user:password@tcp(ec-db
 migrate -path /go/src/app/migrations/ -database "mysql://user:password@tcp(ec-db:3306)/ec" down 1
 
 ```
+
+## linter
+
+linterは [golangci-lint](https://golangci-lint.run/) を使用している。
+現時点ではデフォルトの設定のまま運用し定義調整する。
 
 ## TODO
 
