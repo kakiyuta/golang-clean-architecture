@@ -22,5 +22,8 @@ gen-mock:
 	mockgen -source=domain/repository/variants.go -destination=domain/repository/variants_mock.go -package=repository
 	mockgen -source=infra/db/connector.go -destination=infra/db/connector_mock.go -package=db
 
+test:
+	go test -v ./...
+
 lint:
 	golangci-lint run
