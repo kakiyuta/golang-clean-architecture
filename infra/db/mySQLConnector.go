@@ -4,12 +4,9 @@ import (
 	"database/sql"
 	"errors"
 	"log"
-	"os"
-	"time"
 
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
-	"gorm.io/gorm/logger"
 )
 
 type MySQLConnector struct {
@@ -90,17 +87,4 @@ func (c *MySQLConnector) Rollback() {
 
 	c.isTranzaction = false
 	c.tranzaction = nil
-}
-
-func logSQLError() logger.Interface {
-	logLevel := logger.Info
-	return logger.New(
-		log.New(os.Stdout, "\r\n", log.LstdFlags), // io writer
-		logger.Config{
-			SlowThreshold:             time.Second, // Slow SQL threshold
-			LogLevel:                  logLevel,    // Log level
-			IgnoreRecordNotFoundError: true,        // Ignore ErrRecordNotFound error for logger
-			Colorful:                  true,        // Disable color
-		},
-	)
 }
