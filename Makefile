@@ -27,3 +27,6 @@ test:
 
 lint:
 	golangci-lint run
+
+air: # hot reload
+	air

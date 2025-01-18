@@ -11,8 +11,8 @@ import (
 )
 
 type ProductList struct {
-	Products []*api.ProductVariants `json:"products"`
 	Total    int                    `json:"total"`
+	Products []*api.ProductVariants `json:"products"`
 }
 
 func (c *Controller) GetV1Products(ctx echo.Context, params api.GetV1ProductsParams) error {

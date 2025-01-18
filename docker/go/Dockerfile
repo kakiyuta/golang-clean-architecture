@@ -16,3 +16,6 @@ RUN curl -L https://github.com/golang-migrate/migrate/releases/download/v4.17.1/
     && mv migrate /usr/local/bin/migrate
 
 ENV ENV=docker
+
+# hot reload
+RUN go install github.com/air-verse/air@latest
