@@ -61,9 +61,7 @@ func Init() {
 		panic(err)
 	}
 	defer func() {
-		if err := logger.Sync(); err != nil {
-			panic(err)
-		}
+		_ = logger.Sync() //nolint:errcheck
 	}()
 	zap.ReplaceGlobals(logger)
 }
