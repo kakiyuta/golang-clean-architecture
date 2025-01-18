@@ -30,5 +30,5 @@ linterは [golangci-lint](https://golangci-lint.run/) を使用している。
 ## TODO
 
 - ~~github actions の設定~~
-- github actionsのworkflowにlintを追加
+- ~~github actionsのworkflowにlintを追加~~
 - テストフレームワーク `Testify` の調査
