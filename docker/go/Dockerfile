@@ -19,3 +19,6 @@ ENV ENV=docker
 
 # hot reload
 RUN go install github.com/air-verse/air@latest
+
+# oapi-codegen
+RUN go install github.com/oapi-codegen/oapi-codegen/v2/cmd/oapi-codegen@latest
