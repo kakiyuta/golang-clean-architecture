@@ -28,7 +28,3 @@ linterは [golangci-lint](https://golangci-lint.run/) を使用している。
 現時点ではデフォルトの設定のまま運用し定義調整する。
 
 ## TODO
-
-- ~~github actions の設定~~
-- ~~github actionsのworkflowにlintを追加~~
-- テストフレームワーク `Testify` の調査

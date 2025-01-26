@@ -26,6 +26,7 @@ func main() {
 
 	// Logger
 	e.Use(middleware.Logger())
+	e.Use(middleware.Recover())
 
 	// ローカルテスト用のレポジトリを作成
 	repo := registry.NewDevRepository()
