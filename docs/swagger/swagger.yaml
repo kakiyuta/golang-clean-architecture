@@ -7,6 +7,8 @@ paths:
   /v1/products:
     get:
       description: 全商品を取得
+      security:
+        - bearerAuth: []
       parameters:
         - name: limit
           in: query
@@ -94,6 +96,10 @@ paths:
                     type: string
                     example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJlbWFpbCI6ImhvbWVAZXhhbXBsZS5jb20iLCJpYXQiOjE1MTYyMzkwMjJ9.7J4z"
 components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
   schemas:
     Prouct:
       type: object

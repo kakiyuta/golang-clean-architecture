@@ -22,6 +22,10 @@ import (
 	openapi_types "github.com/oapi-codegen/runtime/types"
 )
 
+const (
+	BearerAuthScopes = "bearerAuth.Scopes"
+)
+
 // ProductVariants defines model for ProductVariants.
 type ProductVariants struct {
 	Id          *int64     `json:"id,omitempty"`
@@ -645,6 +649,8 @@ func (w *ServerInterfaceWrapper) PostV1Login(ctx echo.Context) error {
 func (w *ServerInterfaceWrapper) GetV1Products(ctx echo.Context) error {
 	var err error
 
+	ctx.Set(BearerAuthScopes, []string{})
+
 	// Parameter object where we will unmarshal all parameters from the context
 	var params GetV1ProductsParams
 	// ------------- Optional query parameter "limit" -------------
@@ -712,20 +718,20 @@ func RegisterHandlersWithBaseURL(router EchoRouter, si ServerInterface, baseURL 
 // Base64 encoded, gzipped, json marshaled Swagger object
 var swaggerSpec = []string{
 
-	"H4sIAAAAAAAC/7RVX4/bRBD/KqeBRyuJQ6+ofqKNSmVzxwUO0rRVHzb2JN6cvbvdXafnq/JwiUBIICGB",
-	"DtR3HhASqILHSnwZKyC+Bdq18+eIozvg+mLtzM7+9jczvx2/gJCngjNkWoH3AlQYY0rssit5lIW6RyQl",
-	"1a6QXKDUFK1FI/MdcpkSDR5Qpm/fAgd0LrA0cYQSpg4wkqIJrXaUlpSNzMaEJDQimnJWAmpM7eJtiUPw",
-	"4K3mmlyzYtas+JjjFR6RkuQwXTv4YIyhjehKnoX65qnX3bUk9gbqJCQNN3dWZ7Z5GBdlQ26iI1ShpMLU",
-	"Fzy439k7jrnYu9v1ze1UJ7j2ggMTlKqMdButRsvcywUyIih48I51OSCIjm1SzYnbTPiIMpsvV3r7wmL+",
-	"czF7Vcx+KOa/gQWTttd+BB50udI998AiOCDxWYZK3+NRbnBCzjSWpSRCJDS055pjxdlapNuFxpTQxC5O",
-	"SSpsejEf4XuV2Qh5Cs66EWW4U1NuotRzLqPLUCuvU6MGkwCVGIH3ZIW7OvC0tkvrI1pmaB1KcKbKXNqt",
-	"1v+ohOYnyC7TxzyIBw9CekQD/9Mz3/2Q+spnH++HHf+2fyL6vU5wp4F54IbtXt5vJyf+mJ8edIJk8PB9",
-	"MTBBaTwZPOzdfdyP40H/nnp8vD8etFv0oBOIR/2P6NH4vnv4yaP88Ozk+eE4uNN4N7h1VlusmmJcVs7R",
-	"B8Y7dazKRDmHbF4jrNHZ4rMfFxefL749L2bfLL7+bvH791tqe4C653aXQKY1kqSoUSrwnmzhWYzi/GUx",
-	"+7IE/uPiFZhnBR48y1DmsHyrkNCUanA2GhHhkGSJBs9tOZCSU5pmqTGMRVllOTUv+WoaxfkvxeynYn5R",
-	"zF4X83kx/2IHKz4cKtxBa5NHq4bH0xsV4mbzrjXe//nX2RrzDmiuSXKtkXp9rTk7ZthKWH++fP3XV7/u",
-	"GGMbyrqZSbb8E6yf77Fd7FU3gZXWAbKRjsFr7+9fNZMs4H+bQ+6/yuOK3mb1TehIJBoj++qn078DAAD/",
-	"/9W+Hi2VCAAA",
+	"H4sIAAAAAAAC/7RVQW/jRBT+K9WDo5XEYbtofaIbLSuHlgYK2exWPUzsl3hSe2Z2Ztytu8qhiUBIICGB",
+	"Cto7B4QEWsGxEn/GCoh/gWbsxglx1QLdizXzZt7nb9775puXEPBEcIZMK/BeggoiTIgd9iQP00D3iaSk",
+	"XBWSC5Saop3R0HxHXCZEgweU6fv3wAGdCSymOEYJUwcYSdBsLVeUlpSNzcIJiWlINOWsANSY2MHbEkfg",
+	"wVvNilyzZNYs+Zj0Eo9ISTKYVgE+nGBgd/QkTwN999Tr/nVF7A3USUgarK4sczZ5TB1QGKSS6uzAVKyg",
+	"MEQiUe6kOlo22SQV4YpLpLWAqcGgbMTN1hBVIKkwLQIPHnW2DiIutnZ6vkmiOsYqCg6coFTFTrfRarQM",
+	"dS6QEUHBg3dsyAFBdGRJNU/cZszHlNmScaU3f5jPf85nr/PZD/n8N7Bg0srFD8GDHle67+5aBAckPk9R",
+	"6Yc8zAxOwJnGohtEiJgGNq85UZxVOt/sFSaExnZwShJhjxfxMb5XThsBT8Cpellsd2o6RpR6wWW4DrWM",
+	"OjWCMgegEkPwDpe4y4SjzUavpWiZog0owZkqztJutf5HJTQ/RrZOH7NuNHwc0H3a9T89890Pqa989vF2",
+	"0PHv+8di0O90HzQw67pBu58N2vGxP+Gnu51uPHzyvhiaTUl0MnzS33k2iKLh4KF6drA9GbZbdLfTFU8H",
+	"H9H9ySN375On2d7Z8Yu9SfdB493uvbPaYtUUY105+x+Y6NSxKhOFldlzjbFGZ4vPflxcfL749jyffbP4",
+	"+rvF799vqO0x6r7buwIyrZEkQY1SgXe4gWcx8vNX+ezLAviPi9dgrhV48DxFmcHVdYeYJlSDs9KIEEck",
+	"jTV4bsuBhJzSJE3MxMwoK2dOjRncTCM//yWf/ZTPL/LZZT6f5/MvrmHFRyOF19Ba5dGq4XF0p0Jcbd6t",
+	"Xoh/PlwbL4UDmmsS38qVb621ynetHlYd9/BoemQ8odbilrr789XlX1/9eo3LrQjvbozu6q2pbveBHWyV",
+	"fwKrvF1kY3OC9vb2TZZlAf+bTbn/6hw3tD6t71FHItEYWlOYTv8OAAD//0fMucL3CAAA",
 }
 
 // GetSwagger returns the content of the embedded swagger specification file

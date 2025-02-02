@@ -19,7 +19,7 @@ func NewAuthUsecase(cc db.Connector) AuthUsecase {
 
 func (a *AuthUsecase) Login(input *input.Login) (*output.AuthLogin, error) {
 	// 簡易的なログイン処理
-	if input.Email != "hoge@example.com" || input.Password != "passworda" {
+	if input.Email != "hoge@example.com" || input.Password != "password" {
 		return nil, weberrors.New(401, "Invalid email or password")
 	}
 
