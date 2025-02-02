@@ -19,6 +19,11 @@ import (
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/labstack/echo/v4"
 	"github.com/oapi-codegen/runtime"
+	openapi_types "github.com/oapi-codegen/runtime/types"
+)
+
+const (
+	BearerAuthScopes = "bearerAuth.Scopes"
 )
 
 // ProductVariants defines model for ProductVariants.
@@ -41,6 +46,12 @@ type Variant struct {
 	Price *int    `json:"price,omitempty"`
 }
 
+// PostV1LoginJSONBody defines parameters for PostV1Login.
+type PostV1LoginJSONBody struct {
+	Email    openapi_types.Email `json:"email"`
+	Password string              `json:"password"`
+}
+
 // GetV1ProductsParams defines parameters for GetV1Products.
 type GetV1ProductsParams struct {
 	// Limit 取得する商品数
@@ -54,6 +65,9 @@ type GetV1ProductsParams struct {
 type PostV1ProductsJSONBody struct {
 	Name string `json:"name"`
 }
+
+// PostV1LoginJSONRequestBody defines body for PostV1Login for application/json ContentType.
+type PostV1LoginJSONRequestBody PostV1LoginJSONBody
 
 // PostV1ProductsJSONRequestBody defines body for PostV1Products for application/json ContentType.
 type PostV1ProductsJSONRequestBody PostV1ProductsJSONBody
@@ -131,6 +145,11 @@ func WithRequestEditorFn(fn RequestEditorFn) ClientOption {
 
 // The interface specification for the client above.
 type ClientInterface interface {
+	// PostV1LoginWithBody request with any body
+	PostV1LoginWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	PostV1Login(ctx context.Context, body PostV1LoginJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+
 	// GetV1Products request
 	GetV1Products(ctx context.Context, params *GetV1ProductsParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 
@@ -138,6 +157,30 @@ type ClientInterface interface {
 	PostV1ProductsWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
 
 	PostV1Products(ctx context.Context, body PostV1ProductsJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+}
+
+func (c *Client) PostV1LoginWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewPostV1LoginRequestWithBody(c.Server, contentType, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) PostV1Login(ctx context.Context, body PostV1LoginJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewPostV1LoginRequest(c.Server, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
 }
 
 func (c *Client) GetV1Products(ctx context.Context, params *GetV1ProductsParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
@@ -174,6 +217,46 @@ func (c *Client) PostV1Products(ctx context.Context, body PostV1ProductsJSONRequ
 		return nil, err
 	}
 	return c.Client.Do(req)
+}
+
+// NewPostV1LoginRequest calls the generic PostV1Login builder with application/json body
+func NewPostV1LoginRequest(server string, body PostV1LoginJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewPostV1LoginRequestWithBody(server, "application/json", bodyReader)
+}
+
+// NewPostV1LoginRequestWithBody generates requests for PostV1Login with any type of body
+func NewPostV1LoginRequestWithBody(server string, contentType string, body io.Reader) (*http.Request, error) {
+	var err error
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/v1/login")
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("POST", queryURL.String(), body)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", contentType)
+
+	return req, nil
 }
 
 // NewGetV1ProductsRequest generates requests for GetV1Products
@@ -324,6 +407,11 @@ func WithBaseURL(baseURL string) ClientOption {
 
 // ClientWithResponsesInterface is the interface specification for the client with responses above.
 type ClientWithResponsesInterface interface {
+	// PostV1LoginWithBodyWithResponse request with any body
+	PostV1LoginWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*PostV1LoginResponse, error)
+
+	PostV1LoginWithResponse(ctx context.Context, body PostV1LoginJSONRequestBody, reqEditors ...RequestEditorFn) (*PostV1LoginResponse, error)
+
 	// GetV1ProductsWithResponse request
 	GetV1ProductsWithResponse(ctx context.Context, params *GetV1ProductsParams, reqEditors ...RequestEditorFn) (*GetV1ProductsResponse, error)
 
@@ -331,6 +419,30 @@ type ClientWithResponsesInterface interface {
 	PostV1ProductsWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*PostV1ProductsResponse, error)
 
 	PostV1ProductsWithResponse(ctx context.Context, body PostV1ProductsJSONRequestBody, reqEditors ...RequestEditorFn) (*PostV1ProductsResponse, error)
+}
+
+type PostV1LoginResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *struct {
+		Token *string `json:"token,omitempty"`
+	}
+}
+
+// Status returns HTTPResponse.Status
+func (r PostV1LoginResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r PostV1LoginResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
 }
 
 type GetV1ProductsResponse struct {
@@ -380,6 +492,23 @@ func (r PostV1ProductsResponse) StatusCode() int {
 	return 0
 }
 
+// PostV1LoginWithBodyWithResponse request with arbitrary body returning *PostV1LoginResponse
+func (c *ClientWithResponses) PostV1LoginWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*PostV1LoginResponse, error) {
+	rsp, err := c.PostV1LoginWithBody(ctx, contentType, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParsePostV1LoginResponse(rsp)
+}
+
+func (c *ClientWithResponses) PostV1LoginWithResponse(ctx context.Context, body PostV1LoginJSONRequestBody, reqEditors ...RequestEditorFn) (*PostV1LoginResponse, error) {
+	rsp, err := c.PostV1Login(ctx, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParsePostV1LoginResponse(rsp)
+}
+
 // GetV1ProductsWithResponse request returning *GetV1ProductsResponse
 func (c *ClientWithResponses) GetV1ProductsWithResponse(ctx context.Context, params *GetV1ProductsParams, reqEditors ...RequestEditorFn) (*GetV1ProductsResponse, error) {
 	rsp, err := c.GetV1Products(ctx, params, reqEditors...)
@@ -404,6 +533,34 @@ func (c *ClientWithResponses) PostV1ProductsWithResponse(ctx context.Context, bo
 		return nil, err
 	}
 	return ParsePostV1ProductsResponse(rsp)
+}
+
+// ParsePostV1LoginResponse parses an HTTP response from a PostV1LoginWithResponse call
+func ParsePostV1LoginResponse(rsp *http.Response) (*PostV1LoginResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &PostV1LoginResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest struct {
+			Token *string `json:"token,omitempty"`
+		}
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	}
+
+	return response, nil
 }
 
 // ParseGetV1ProductsResponse parses an HTTP response from a GetV1ProductsWithResponse call
@@ -464,6 +621,9 @@ func ParsePostV1ProductsResponse(rsp *http.Response) (*PostV1ProductsResponse, e
 // ServerInterface represents all server handlers.
 type ServerInterface interface {
 
+	// (POST /v1/login)
+	PostV1Login(ctx echo.Context) error
+
 	// (GET /v1/products)
 	GetV1Products(ctx echo.Context, params GetV1ProductsParams) error
 
@@ -476,9 +636,20 @@ type ServerInterfaceWrapper struct {
 	Handler ServerInterface
 }
 
+// PostV1Login converts echo context to params.
+func (w *ServerInterfaceWrapper) PostV1Login(ctx echo.Context) error {
+	var err error
+
+	// Invoke the callback with all the unmarshaled arguments
+	err = w.Handler.PostV1Login(ctx)
+	return err
+}
+
 // GetV1Products converts echo context to params.
 func (w *ServerInterfaceWrapper) GetV1Products(ctx echo.Context) error {
 	var err error
+
+	ctx.Set(BearerAuthScopes, []string{})
 
 	// Parameter object where we will unmarshal all parameters from the context
 	var params GetV1ProductsParams
@@ -538,6 +709,7 @@ func RegisterHandlersWithBaseURL(router EchoRouter, si ServerInterface, baseURL 
 		Handler: si,
 	}
 
+	router.POST(baseURL+"/v1/login", wrapper.PostV1Login)
 	router.GET(baseURL+"/v1/products", wrapper.GetV1Products)
 	router.POST(baseURL+"/v1/products", wrapper.PostV1Products)
 
@@ -546,16 +718,20 @@ func RegisterHandlersWithBaseURL(router EchoRouter, si ServerInterface, baseURL 
 // Base64 encoded, gzipped, json marshaled Swagger object
 var swaggerSpec = []string{
 
-	"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",
+	"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",
 }
 
 // GetSwagger returns the content of the embedded swagger specification file
