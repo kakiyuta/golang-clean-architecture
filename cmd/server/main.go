@@ -7,8 +7,8 @@ import (
 	"strings"
 
 	"github.com/getkin/kin-openapi/openapi3filter"
-	"github.com/kakiyuta/golang-clean-architecture/app/controller"
 	"github.com/kakiyuta/golang-clean-architecture/app/gen/api"
+	"github.com/kakiyuta/golang-clean-architecture/app/handler/controller"
 	"github.com/kakiyuta/golang-clean-architecture/app/registry"
 	"github.com/labstack/echo/v4"
 	middleware "github.com/labstack/echo/v4/middleware"
