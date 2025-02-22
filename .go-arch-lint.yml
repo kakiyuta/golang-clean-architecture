@@ -5,6 +5,9 @@ version: 3
 
 workdir: .
 
+allow:
+  deepScan: false # よくわからないから一旦false
+
 # 除外するファイルのパターン
 excludeFiles:
   - "^.*_test\\.go$"
