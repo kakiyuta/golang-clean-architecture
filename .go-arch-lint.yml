@@ -12,20 +12,38 @@ excludeFiles:
   - "^.*_mock\\.go$"
   - "^.*\/tmp\/.*$"
   - "^.*\/gen\/.*$"
-  - "^.*\/cmd\/.*$"
   - "^.*\/mock\/.*$"
+  - "^.*\/mock\/.*$"
+  - "^.*\/cmd\/grpc\/*.go"
+
+exclude:
+  - cmd/grpc
+  - handler/rpc
 
 components:
+  main: { in: cmd/server }
+  genapi: { in: gen/api }
+  controller: { in: handler/controller }
+  registry: { in: registry }
+  input: { in: domain/dto/input }
+  output: { in: domain/dto/output }
+  usecase: { in: usecase }
+  repository: { in: domain/repository }
+  model: { in: domain/model }
+  weberror: { in: library/weberrors }
+  # infra層
+  db: { in: infra/db }
+  dao: { in: infra/dao/** }
 
 vendors:
   echo:
     in:
       - github.com/labstack/echo/*
   zap: { in: go.uber.org/zap }
+  gorm: { in: gorm.io/** }
 
 # どのパッケージからも呼び出せるパッケージ名
 commonComponents:
-  - model
   - weberror
 
 # どのパッケージからも呼び出せるベンダーパッケージ名
@@ -33,3 +51,48 @@ commonVendors:
   - zap
 
 deps:
+  main:
+    anyVendorDeps: true
+    mayDependOn:
+      - genapi
+      - controller
+      - registry
+
+  controller:
+    mayDependOn:
+      - registry
+      - genapi
+      - input
+      - output
+      - usecase
+    canUse:
+      - echo
+
+  usecase:
+    mayDependOn:
+      - input
+      - output
+      - repository
+      - model
+
+  output:
+    mayDependOn:
+      - model
+
+  repository:
+    mayDependOn:
+      - model
+
+  registry:
+    mayDependOn:
+      - repository
+      - db
+      - dao
+  
+  db:
+    anyVendorDeps: true
+    anyProjectDeps: true
+  
+  dao:
+    anyVendorDeps: true
+    anyProjectDeps: true
