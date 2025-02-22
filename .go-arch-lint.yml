@@ -1,0 +1,35 @@
+# go-arch-lint の設定ファイル
+# https://github.com/fe3dback/go-arch-lint
+
+version: 3
+
+workdir: .
+
+# 除外するファイルのパターン
+excludeFiles:
+  - "^.*_test\\.go$"
+  - "^.*\/test\/.*$"
+  - "^.*_mock\\.go$"
+  - "^.*\/tmp\/.*$"
+  - "^.*\/gen\/.*$"
+  - "^.*\/cmd\/.*$"
+  - "^.*\/mock\/.*$"
+
+components:
+
+vendors:
+  echo:
+    in:
+      - github.com/labstack/echo/*
+  zap: { in: go.uber.org/zap }
+
+# どのパッケージからも呼び出せるパッケージ名
+commonComponents:
+  - model
+  - weberror
+
+# どのパッケージからも呼び出せるベンダーパッケージ名
+commonVendors:
+  - zap
+
+deps:
