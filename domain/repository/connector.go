@@ -1,4 +1,4 @@
-package db
+package repository
 
 // Connector コネクションコントローラ
 type Connector interface {

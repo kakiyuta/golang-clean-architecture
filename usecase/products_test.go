@@ -9,7 +9,6 @@ import (
 	"github.com/kakiyuta/golang-clean-architecture/app/domain/dto/output"
 	"github.com/kakiyuta/golang-clean-architecture/app/domain/model"
 	"github.com/kakiyuta/golang-clean-architecture/app/domain/repository"
-	"github.com/kakiyuta/golang-clean-architecture/app/infra/db"
 )
 
 func TestProductsUsecase_GetProducts_正常系(t *testing.T) {
@@ -20,7 +19,7 @@ func TestProductsUsecase_GetProducts_正常系(t *testing.T) {
 	// モックの生成
 	mockProducts := repository.NewMockProducts(ctrl)
 	mockVariants := repository.NewMockVariants(ctrl)
-	mockDb := db.NewMockConnector(ctrl)
+	mockDb := repository.NewMockConnector(ctrl)
 
 	// モックの振る舞いを定義
 	mockProducts.EXPECT().GetProductsWithVariation(3, 0).Return(
@@ -71,10 +70,10 @@ func TestProductsUsecase_CreateProduct(t *testing.T) {
 	// モックの生成
 	mockProducts := repository.NewMockProducts(ctrl)
 	mockVariants := repository.NewMockVariants(ctrl)
-	mockDb := db.NewMockConnector(ctrl)
+	mockDb := repository.NewMockConnector(ctrl)
 
 	type fields struct {
-		ConnectionController db.Connector
+		ConnectionController repository.Connector
 		ProductRepository    repository.Products
 		VariantRepository    repository.Variants
 	}

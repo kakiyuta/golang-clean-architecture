@@ -7,7 +7,7 @@ import (
 )
 
 type RepositoryInterface interface {
-	GetDB() db.Connector
+	GetDB() repository.Connector
 	NewProducts() repository.Products
 	NewVariants() repository.Variants
 }
@@ -24,7 +24,7 @@ func NewDevRepository() RepositoryInterface {
 	return &repositoryImp{db: db}
 }
 
-func (r *repositoryImp) GetDB() db.Connector {
+func (r *repositoryImp) GetDB() repository.Connector {
 	return r.db
 }
 

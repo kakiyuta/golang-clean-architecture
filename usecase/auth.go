@@ -3,15 +3,15 @@ package usecase
 import (
 	"github.com/kakiyuta/golang-clean-architecture/app/domain/dto/input"
 	"github.com/kakiyuta/golang-clean-architecture/app/domain/dto/output"
-	"github.com/kakiyuta/golang-clean-architecture/app/infra/db"
+	"github.com/kakiyuta/golang-clean-architecture/app/domain/repository"
 	"github.com/kakiyuta/golang-clean-architecture/app/library/weberrors"
 )
 
 type AuthUsecase struct {
-	connectionController db.Connector
+	connectionController repository.Connector
 }
 
-func NewAuthUsecase(cc db.Connector) AuthUsecase {
+func NewAuthUsecase(cc repository.Connector) AuthUsecase {
 	return AuthUsecase{
 		connectionController: cc,
 	}

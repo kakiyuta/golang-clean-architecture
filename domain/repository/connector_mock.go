@@ -2,7 +2,7 @@
 // Source: infra/db/connector.go
 
 // Package db is a generated GoMock package.
-package db
+package repository
 
 import (
 	reflect "reflect"
