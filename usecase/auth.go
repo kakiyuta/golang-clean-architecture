@@ -1,10 +1,10 @@
 package usecase
 
 import (
+	"github.com/kakiyuta/golang-clean-architecture/app/domain/dto/input"
+	"github.com/kakiyuta/golang-clean-architecture/app/domain/dto/output"
 	"github.com/kakiyuta/golang-clean-architecture/app/infra/db"
 	"github.com/kakiyuta/golang-clean-architecture/app/library/weberrors"
-	"github.com/kakiyuta/golang-clean-architecture/app/usecase/input"
-	"github.com/kakiyuta/golang-clean-architecture/app/usecase/output"
 )
 
 type AuthUsecase struct {

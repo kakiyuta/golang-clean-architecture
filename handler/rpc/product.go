@@ -3,11 +3,11 @@ package rpc
 import (
 	"context"
 
+	"github.com/kakiyuta/golang-clean-architecture/app/domain/dto/input"
+	"github.com/kakiyuta/golang-clean-architecture/app/domain/dto/output"
 	"github.com/kakiyuta/golang-clean-architecture/app/gen/grpc"
 	"github.com/kakiyuta/golang-clean-architecture/app/registry"
 	"github.com/kakiyuta/golang-clean-architecture/app/usecase"
-	"github.com/kakiyuta/golang-clean-architecture/app/usecase/input"
-	"github.com/kakiyuta/golang-clean-architecture/app/usecase/output"
 )
 
 type ProductServer struct {
