@@ -91,11 +91,11 @@ deps:
       - repository
       - db
       - dao
-  
+
   db:
     anyVendorDeps: true
     anyProjectDeps: true
-  
+
   dao:
     anyVendorDeps: true
     anyProjectDeps: true
