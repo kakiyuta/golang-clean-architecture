@@ -27,6 +27,7 @@ test:
 
 lint:
 	golangci-lint run
+	go tool go-arch-lint check
 
 air: # hot reload
 	air
