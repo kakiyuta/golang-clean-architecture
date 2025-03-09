@@ -30,7 +30,7 @@ lint:
 	go tool go-arch-lint check
 
 air: # hot reload
-	air
+	go tool air
 
 gen-protoc:
 	protoc --go_out=./gen --go_opt=paths=source_relative \
