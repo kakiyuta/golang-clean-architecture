@@ -28,6 +28,3 @@ linterは [golangci-lint](https://golangci-lint.run/) を使用している。
 現時点ではデフォルトの設定のまま運用し定義調整する。
 
 ## TODO
-
-- gRPC
-- [Connect](http://zenn.dev/portalkeyinc/articles/18f6f3f54da55a)
